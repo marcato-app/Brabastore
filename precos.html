@@ -141,9 +141,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 12px 10px 14px;
+    padding: 10px 12px 10px 10px;
     border-radius: 999px;
   }
+
+  .topbar-left{ display: flex; align-items: center; gap: 4px; }
 
   .brand{ display: flex; align-items: center; gap: 10px; }
 
@@ -179,6 +181,128 @@
   }
   .icon-btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,0.10); border-color: var(--gold-soft); }
   .icon-btn svg{ width: 17px; height: 17px; }
+
+  /* ---------- Drawer (menu lateral) ---------- */
+  .drawer-overlay{
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background: rgba(0,0,0,0.55);
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .drawer-overlay.open{ opacity: 1; pointer-events: auto; }
+
+  .drawer{
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 41;
+    width: min(320px, 86vw);
+    border-radius: 0 26px 26px 0;
+    padding: calc(18px + env(safe-area-inset-top, 0px)) 0 calc(18px + env(safe-area-inset-bottom, 0px));
+    display: flex;
+    flex-direction: column;
+    transform: translateX(-104%);
+    transition: transform 0.32s cubic-bezier(.16,1,.3,1);
+  }
+  .drawer.open{ transform: translateX(0); }
+
+  .drawer-head{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px 18px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 8px;
+  }
+
+  .drawer-nav{
+    flex: 1;
+    overflow-y: auto;
+    padding: 6px 10px;
+  }
+
+  .drawer-row{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background: none;
+    border: none;
+    text-align: left;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    padding: 13px 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .drawer-row:hover{ background: rgba(255,255,255,0.06); }
+  .drawer-row.active{ color: var(--gold-hover); }
+  .drawer-row svg{ width: 16px; height: 16px; color: var(--ink-faint); flex-shrink: 0; }
+
+  .drawer-row .soon{
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--gold-hover);
+    background: var(--gold-dim);
+    border: 1px solid var(--gold-soft);
+    padding: 3px 8px;
+    border-radius: 999px;
+    text-transform: uppercase;
+  }
+
+  .drawer-submenu{
+    display: flex;
+    flex-direction: column;
+    padding: 2px 0 10px 14px;
+    border-left: 1px solid var(--line);
+    margin: 0 10px 6px 22px;
+  }
+  .drawer-submenu button{
+    background: none;
+    border: none;
+    text-align: left;
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--ink-dim);
+    padding: 9px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .drawer-submenu button:hover{ color: var(--ink); background: rgba(255,255,255,0.06); }
+  .drawer-submenu button.active{ color: var(--gold-hover); font-weight: 700; }
+
+  .drawer-divider{
+    height: 1px;
+    background: var(--line);
+    margin: 8px 14px;
+  }
+
+  .drawer-cta{
+    margin: 14px 18px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #17150a;
+    background: linear-gradient(135deg, var(--gold-hover), var(--gold));
+    padding: 13px 18px;
+    border-radius: 999px;
+  }
+  .drawer-cta svg{ width: 16px; height: 16px; }
 
   /* ---------- Hero ---------- */
   .hero{
@@ -369,11 +493,34 @@
     box-shadow: 0 16px 44px rgba(0,0,0,0.5), 0 0 0 1px rgba(215,173,46,0.12), inset 0 1px 0 rgba(255,255,255,0.12);
   }
 
+  .card-photo{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,0.03);
+    padding: 22px 0 14px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .card-photo .device-art{
+    width: 108px;
+    height: auto;
+    position: relative;
+    z-index: 1;
+    filter: drop-shadow(0 16px 22px rgba(0,0,0,0.5));
+  }
+  .card.featured .card-photo .device-art{ width: 128px; }
+
   .card-top{
+    position: absolute;
+    top: 12px; left: 12px; right: 12px;
+    z-index: 2;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 14px;
     gap: 10px;
   }
 
@@ -383,7 +530,9 @@
     letter-spacing: 0.04em;
     text-transform: uppercase;
     color: var(--gold-hover);
-    background: var(--gold-dim);
+    background: rgba(10,10,10,0.55);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
     border: 1px solid var(--gold-soft);
     padding: 5px 11px;
     border-radius: 999px;
@@ -393,8 +542,8 @@
   .colors span{
     width: 15px; height: 15px;
     border-radius: 50%;
-    border: 1px solid rgba(255,255,255,0.25);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.35);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.5);
   }
 
   .card-title{
@@ -606,22 +755,73 @@
   </div>
 
   <header class="topbar glass">
-    <div class="brand">
-      <span class="logo-mark">B</span>
-      <div class="brand-text">
-        <span class="brand-name">Braba da Apple</span>
-        <span class="brand-sub">Consulta de preços</span>
+    <div class="topbar-left">
+      <button class="icon-btn" id="menuBtn" aria-label="Abrir menu">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <div class="brand">
+        <span class="logo-mark">B</span>
+        <div class="brand-text">
+          <span class="brand-name">Braba da Apple</span>
+          <span class="brand-sub">Consulta de preços</span>
+        </div>
       </div>
     </div>
     <div class="topbar-actions">
-      <a class="icon-btn" href="https://instagram.com/brabadapple_" target="_blank" rel="noopener" aria-label="Instagram">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="6" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.6"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor"/></svg>
-      </a>
       <a class="icon-btn" href="https://wa.me/5511926128880?text=Ol%C3%A1%2C%20Braba%20preciso%20de%20atendimento%21" target="_blank" rel="noopener" aria-label="WhatsApp">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.38 5.07L2 22l5.07-1.33A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm5.2 14.2c-.22.62-1.28 1.18-1.77 1.24-.45.06-1.01.09-1.63-.1-.38-.12-.86-.28-1.48-.55-2.6-1.12-4.3-3.75-4.43-3.92-.13-.18-1.06-1.41-1.06-2.7 0-1.28.68-1.91.92-2.17.24-.26.53-.32.7-.32.18 0 .35 0 .5.01.16.01.38-.06.6.45.22.53.75 1.83.82 1.96.07.13.11.29.02.47-.09.18-.13.29-.26.44-.13.16-.28.35-.4.47-.13.13-.27.27-.11.53.16.26.71 1.17 1.52 1.89 1.05.93 1.93 1.22 2.2 1.36.27.13.42.11.58-.07.16-.18.68-.79.86-1.06.18-.27.36-.22.6-.13.24.09 1.53.72 1.79.85.26.13.44.2.5.31.06.11.06.65-.16 1.27z" fill="currentColor"/></svg>
       </a>
     </div>
   </header>
+
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <aside class="drawer glass" id="drawer" aria-hidden="true">
+    <div class="drawer-head">
+      <div class="brand">
+        <span class="logo-mark">B</span>
+        <div class="brand-text">
+          <span class="brand-name">Braba da Apple</span>
+          <span class="brand-sub">Menu</span>
+        </div>
+      </div>
+      <button class="icon-btn" id="drawerClose" aria-label="Fechar menu">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <nav class="drawer-nav">
+      <button class="drawer-row active" data-scroll="grid" data-filter="all">
+        <span>iPhone</span>
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="drawer-submenu">
+        <button data-filter="all" class="active">Todos os iPhone</button>
+        <button data-filter="17e">iPhone 17e</button>
+        <button data-filter="17">iPhone 17</button>
+        <button data-filter="air">iPhone Air</button>
+        <button data-filter="17pro">iPhone 17 Pro</button>
+        <button data-filter="17promax">iPhone 17 Pro Max</button>
+      </div>
+
+      <div class="drawer-divider"></div>
+
+      <button class="drawer-row" data-wa="Mac"><span>Mac</span><span class="soon">Em breve</span></button>
+      <button class="drawer-row" data-wa="iPad"><span>iPad</span><span class="soon">Em breve</span></button>
+      <button class="drawer-row" data-wa="Apple Watch"><span>Watch</span><span class="soon">Em breve</span></button>
+      <button class="drawer-row" data-wa="AirPods"><span>AirPods</span><span class="soon">Em breve</span></button>
+      <button class="drawer-row" data-wa="Acessórios"><span>Acessórios</span><span class="soon">Em breve</span></button>
+
+      <div class="drawer-divider"></div>
+
+      <button class="drawer-row" data-scroll="ofertas"><span>Ofertas &amp; Garantia</span></button>
+      <button class="drawer-row" data-scroll="site-footer"><span>Loja &amp; Contato</span></button>
+    </nav>
+
+    <a class="drawer-cta" href="https://wa.me/5511926128880?text=Ol%C3%A1%2C%20Braba%20preciso%20de%20atendimento%21" target="_blank" rel="noopener">
+      Falar no WhatsApp
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </aside>
 
   <main class="page">
 
@@ -666,7 +866,7 @@
       <p>Tente buscar por outro nome, cor ou armazenamento.</p>
     </div>
 
-    <p class="disclaimer">Preços sujeitos a alteração sem aviso prévio e disponibilidade de estoque. Confirme valores e condições diretamente no WhatsApp antes da compra.</p>
+    <p class="disclaimer" id="ofertas">Preços sujeitos a alteração sem aviso prévio e disponibilidade de estoque. Confirme valores e condições diretamente no WhatsApp antes da compra.</p>
 
     <div class="badges-row">
       <span class="badge-pill glass"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 7h11v8H3z" stroke="currentColor" stroke-width="1.6"/><path d="M14 10h4l3 3v2h-7z" stroke="currentColor" stroke-width="1.6"/><circle cx="7" cy="18" r="1.6" stroke="currentColor" stroke-width="1.6"/><circle cx="17" cy="18" r="1.6" stroke="currentColor" stroke-width="1.6"/></svg>Entrega expressa</span>
@@ -678,7 +878,7 @@
 
   </main>
 
-  <footer class="site-footer">
+  <footer class="site-footer" id="site-footer">
     <div class="inner">
       <div class="foot-brand">
         <span class="logo-mark">B</span>
@@ -814,6 +1014,57 @@
     ].join(" ").toLowerCase();
   }
 
+  function lensSVG(cx, cy, r){
+    return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#05050a" stroke="rgba(255,255,255,0.2)" stroke-width="0.6"/>
+      <circle cx="${cx}" cy="${cy}" r="${r * 0.62}" fill="#111116"/>
+      <circle cx="${cx - r * 0.32}" cy="${cy - r * 0.32}" r="${r * 0.24}" fill="rgba(255,255,255,0.55)"/>`;
+  }
+
+  function deviceArtSVG(p){
+    const color = p.colors[0];
+    const uid = p.id;
+    let camera = "";
+
+    if (p.id === "17pro" || p.id === "17promax"){
+      camera = `
+        <rect x="40" y="26" width="38" height="38" rx="14" fill="${color}" stroke="rgba(0,0,0,0.3)" stroke-width="1"/>
+        <rect x="40" y="26" width="38" height="38" rx="14" fill="url(#sheen-${uid})"/>
+        ${lensSVG(52, 39, 6.6)}
+        ${lensSVG(67, 39, 6.6)}
+        ${lensSVG(59.5, 54, 6.6)}
+        <circle cx="72" cy="58" r="2.2" fill="#05050a" stroke="rgba(255,255,255,0.15)" stroke-width="0.5"/>`;
+    } else if (p.id === "17"){
+      camera = `
+        <rect x="44" y="24" width="27" height="46" rx="13.5" fill="${color}" stroke="rgba(0,0,0,0.3)" stroke-width="1"/>
+        <rect x="44" y="24" width="27" height="46" rx="13.5" fill="url(#sheen-${uid})"/>
+        ${lensSVG(57.5, 37, 7)}
+        ${lensSVG(57.5, 60, 7)}`;
+    } else {
+      camera = `
+        <circle cx="55" cy="41" r="15" fill="${color}" stroke="rgba(0,0,0,0.3)" stroke-width="1"/>
+        <circle cx="55" cy="41" r="15" fill="url(#sheen-${uid})"/>
+        ${lensSVG(55, 41, 7.6)}`;
+    }
+
+    return `
+    <svg class="device-art" viewBox="0 0 160 210" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="glow-${uid}" cx="50%" cy="30%" r="65%">
+          <stop offset="0%" stop-color="${color}" stop-opacity="0.5"/>
+          <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="sheen-${uid}" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.34"/>
+          <stop offset="45%" stop-color="#ffffff" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <ellipse cx="80" cy="100" rx="90" ry="95" fill="url(#glow-${uid})"/>
+      <rect x="24" y="8" width="112" height="194" rx="30" fill="${color}" stroke="rgba(0,0,0,0.35)" stroke-width="1.4"/>
+      <rect x="24" y="8" width="112" height="194" rx="30" fill="url(#sheen-${uid})"/>
+      ${camera}
+    </svg>`;
+  }
+
   function cardHTML(p){
     const colorsHTML = p.colors.map(c => `<span style="background:${c}"></span>`).join("");
     const specsHTML = p.specs.map(s => `<li>${ICONS[s.icon]}${s.text}</li>`).join("");
@@ -826,9 +1077,12 @@
 
     return `
       <article class="card glass${p.featured ? " featured" : ""}" data-id="${p.id}">
-        <div class="card-top">
-          <span class="tag">${p.tag}</span>
-          <div class="colors">${colorsHTML}</div>
+        <div class="card-photo">
+          <div class="card-top">
+            <span class="tag">${p.tag}</span>
+            <div class="colors">${colorsHTML}</div>
+          </div>
+          ${deviceArtSVG(p)}
         </div>
         <h2 class="card-title">${p.name}</h2>
         <ul class="specs">${specsHTML}</ul>
@@ -850,6 +1104,11 @@
   const clearBtn = document.getElementById("clearBtn");
   const chips = document.getElementById("chips");
   const sortSelect = document.getElementById("sortSelect");
+  const menuBtn = document.getElementById("menuBtn");
+  const drawer = document.getElementById("drawer");
+  const drawerOverlay = document.getElementById("drawerOverlay");
+  const drawerClose = document.getElementById("drawerClose");
+  const drawerSubmenu = document.querySelector(".drawer-submenu");
 
   let activeFilter = "all";
   let sortMode = "relevance";
@@ -887,18 +1146,61 @@
     render();
   });
 
+  function setFilter(id){
+    activeFilter = id;
+    chips.querySelectorAll(".chip").forEach(c => c.classList.toggle("active", c.dataset.filter === id));
+    drawerSubmenu.querySelectorAll("button").forEach(b => b.classList.toggle("active", b.dataset.filter === id));
+    render();
+  }
+
   chips.addEventListener("click", (e) => {
     const btn = e.target.closest(".chip");
     if (!btn) return;
-    chips.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
-    btn.classList.add("active");
-    activeFilter = btn.dataset.filter;
-    render();
+    setFilter(btn.dataset.filter);
   });
 
   sortSelect.addEventListener("change", () => {
     sortMode = sortSelect.value;
     render();
+  });
+
+  function openDrawer(){
+    drawer.classList.add("open");
+    drawerOverlay.classList.add("open");
+    drawer.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeDrawer(){
+    drawer.classList.remove("open");
+    drawerOverlay.classList.remove("open");
+    drawer.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
+
+  menuBtn.addEventListener("click", openDrawer);
+  drawerClose.addEventListener("click", closeDrawer);
+  drawerOverlay.addEventListener("click", closeDrawer);
+
+  document.querySelector(".drawer-nav").addEventListener("click", (e) => {
+    const btn = e.target.closest("button");
+    if (!btn) return;
+
+    if (btn.dataset.filter){
+      setFilter(btn.dataset.filter);
+    }
+
+    if (btn.dataset.wa){
+      const msg = `Olá! Gostaria de consultar preços de ${btn.dataset.wa} na Braba da Apple.`;
+      window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, "_blank", "noopener");
+    }
+
+    closeDrawer();
+
+    if (btn.dataset.scroll){
+      const target = document.getElementById(btn.dataset.scroll);
+      if (target) setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "start" }), 280);
+    }
   });
 
   render();

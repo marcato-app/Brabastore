@@ -1,15 +1,16 @@
 # Brabastore
 
-Site estático (consulta de preços) hospedado no **Cloudflare Workers** (static assets, plano gratuito).
+Site da Braba da Apple (www.ibrabastore.com.br), hospedado no **Cloudflare Workers** (static assets, plano gratuito).
 
-- `public/index.html` — página de preços
-- `public/_redirects` — redireciona os links antigos `/precos.html` para `/`
-- `wrangler.jsonc` — configuração do Cloudflare
+- `public/index.html`: bio / link na bio (página principal)
+- `public/precos.html`: consulta de preços (abre em `/precos`)
+- `public/assets/`: logo e foto de capa
+- `wrangler.jsonc`: configuração do Cloudflare
 
 ## Deploy
 
-**Pelo painel (recomendado):** Cloudflare → Workers & Pages → Create → Import a repository →
-escolha `marcato-app/brabastore`. Deixe o build command vazio e o deploy command como
-`npx wrangler deploy`. Cada push na branch de produção publica automaticamente.
+**Pelo painel:** Cloudflare → Workers & Pages → Create → Import a repository →
+escolha `marcato-app/brabastore`. Build command vazio, deploy command `npx wrangler deploy`.
+Cada push na branch de produção publica automaticamente.
 
 **Pela linha de comando:** `npx wrangler deploy`
